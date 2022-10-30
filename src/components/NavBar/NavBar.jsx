@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 
 import { Sidebar, Search } from '..';
+import { fetchToken } from '../../utils';
 import useStyles from './styles';
 
 const NavBar = () => {
@@ -13,7 +14,7 @@ const NavBar = () => {
   const classes = useStyles();
   const isMobile = useMediaQuery('(max-width:600px)');
   const theme = useTheme();
-  const isAuthenticated = true;
+  const isAuthenticated = false;
 
   return (
     <>
@@ -36,7 +37,7 @@ const NavBar = () => {
           {!isMobile && <Search />}
           <div>
             {!isAuthenticated ? (
-              <Button color='inherit' onClick={() => { }}>
+              <Button color='inherit' onClick={fetchToken}>
                 Login &nbsp; <AccountCircle />
               </Button>
             ) : (
@@ -66,7 +67,7 @@ const NavBar = () => {
               variant='temporary'
               anchor='right'
               open={mobileOpen}
-              onClose={() => setMobileOpen((prevMobileOpen)=> !prevMobileOpen)}
+              onClose={() => setMobileOpen((prevMobileOpen) => !prevMobileOpen)}
               classes={{ paper: classes.drawerPaper }}
               ModalProps={{ keepMounted: true }}
             >
