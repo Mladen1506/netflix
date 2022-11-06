@@ -2,13 +2,17 @@ import React, { useEffect } from 'react';
 import { Typography, Button, Box } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { ExitToApp } from '@mui/icons-material';
+import { useGetListQuery } from '../../services/TMDB';
 
 import { userSelector } from '../../features/auth';
 
 const Profile = () => {
   const { user } = useSelector(userSelector);
 
-  const favoriteMovies = [];
+  const { data: favoriteMovies } = useGetListQuery({ listName: 'favorite/movies', accountId: user.id, sessionId: localStorage.getItem('session_id'), page: 1 });
+
+  const { data: watchlistMovies } = useGetListQuery({ listName: 'watchlist/movies', accountId: user.id, sessionId: localStorage.getItem('session_id'), page: 1 });
+
   const logout = () => {
     localStorage.clear();
 
@@ -23,7 +27,7 @@ const Profile = () => {
           Logout &nbsp; <ExitToApp />
         </Button>
       </Box>
-      {!favoriteMovies.length
+      {!favoriteMovies?.results?.length && !watchlistMovies?.results?.length
        ? <Typography variant='h5'>Add Favourites or Watchlist to see them here!</Typography> 
       : (
         <Box>

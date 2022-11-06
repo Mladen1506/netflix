@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Typography, Button, ButtonGroup, Grid, Box, CircularProgress, useMediaQuery, Rating } from '@mui/material';
 import { Movie as MovieIcon, Theaters, Language, PlusOne, Favorite, FavoriteBorderOutlined, Remove, ArrowBack } from '@mui/icons-material';
 import { Link, useParams } from 'react-router-dom';
@@ -7,13 +7,13 @@ import axios from 'axios';
 
 import { selectGenreOrCategory } from '../../features/currentGenreOrCategory';
 import useStyles from './styles';
-import { useGetListQuery, useGetMovieQuery, useGetRecommendationsQuery, useGetListQuery } from '../../services/TMDB';
+import { useGetMovieQuery, useGetRecommendationsQuery, useGetListQuery } from '../../services/TMDB';
 import genreIcons from '../../assets/genres';
 import { MovieList } from '..';
 import { userSelector } from '../../features/auth';
 
 const MovieInformation = () => {
-  const { user } = useSelector();
+  const { user } = useSelector(userSelector);
   const { id } = useParams();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -27,6 +27,14 @@ const MovieInformation = () => {
   const [isMovieFavorited, setIsMovieFavorited] = useState(false);
   const [isMovieWatchlisted, setIsMovieWatchlisted] = useState(false);
 
+  useEffect(() => {
+    setIsMovieFavorited( !! favoriteMovies?.results?.find((movie) => movie?.id === data?.id));
+  }, [favoriteMovies, data]);
+
+  useEffect(() => {
+    setIsMovieWatchlisted( !! watchlistMovies?.results?.find((movie) => movie?.id === data?.id));
+  }, [watchlistMovies, data]);
+
   const addToFavorites = async () => {
     await axios.post(`https://api.themoviedb.org/3/account/${user.id}/favorite?api_key=${process.env.REACT_APP_TMDB_KEY}&session_id=${localStorage.getItem('session_id')}`, {
       media_type: 'movie',
@@ -39,12 +47,10 @@ const MovieInformation = () => {
     await axios.post(`https://api.themoviedb.org/3/account/${user.id}/watchlist?api_key=${process.env.REACT_APP_TMDB_KEY}&session_id=${localStorage.getItem('session_id')}`, {
       media_type: 'movie',
       media_id: id,
-      favorite: !isMovieWatchlisted,
+      watchlist: !isMovieWatchlisted,
     });
     setIsMovieWatchlisted((prev) => !prev);
   };
-
-  console.log(recommendations);
 
   if (isFetching) {
     return (
