@@ -13,7 +13,7 @@ Implemented dark light mode switch.
 ## Deployment
 
 App deployed with Netlify.
-You can see deployed app [here][(https://moviesempire.netlify.app/)]
+You can see deployed app [here](https://moviesempire.netlify.app/)
 
 
 ## Techologies Used
