@@ -1,4 +1,4 @@
-# Netflix App
+#Movie Empire
 
 <img width="1433" alt="Screen Shot 2022-11-15 at 8 55 20 PM" src="https://user-images.githubusercontent.com/89114955/202064433-02c8a96a-7ad9-4d80-89f2-a02fe716b7b1.png" height="400em">
 &nbsp;
